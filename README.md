@@ -6,7 +6,7 @@ Code will be released.
 ## SBD-Trans OCR
 The imdb files (with SBD-Trans OCR) for TextVQA dataset.
 
-Download imdb files from [Google Drive Link](https://drive.google.com/drive/folders/1mMLgxHIf9Ev2W8OvXFyXodpDOHqVXrcf?usp=sharing)
+Download imdb files from [Google Drive Link](https://drive.google.com/file/d/1vj6JzVo9xVYUyjE930nJ4CZ1zf0oELH0/view?usp=sharing)
 
 ## Citation
 If you find this project useful for your research, please cite:
