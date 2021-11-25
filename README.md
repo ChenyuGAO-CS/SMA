@@ -8,6 +8,11 @@ The imdb files (with SBD-Trans OCR) for TextVQA dataset.
 
 Download imdb files from [Google Drive Link](https://drive.google.com/drive/folders/1mMLgxHIf9Ev2W8OvXFyXodpDOHqVXrcf?usp=sharing)
 
+## GT OCR Annotations 
+The imdb files (with GT OCR labels) for TextVQA dataset.
+
+Download imdb files from [Google Drive Link](https://drive.google.com/drive/folders/1wqdB6eIkz5DXRb0CIcCoNKCUmvksv5Ls?usp=sharing)
+
 ## Citation
 If you find this project useful for your research, please cite:
 ```
