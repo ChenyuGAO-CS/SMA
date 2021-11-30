@@ -1,7 +1,23 @@
 # Structured Multimodal Attentions for TextVQA
 
+This repository contains the code for SMA model from the following paper, released under the Pythia framework:
+
+Gao, C., Zhu, Q., Wang, P., Li, H., Liu, Y., Hengel, A. V. D., & Wu, Q. (2021). Structured multimodal attentions for textvqa. Accepted by TPAMI. ([PDF](https://arxiv.org/abs/2006.00753))
+
 ## Code
-Code will be released.
+Please find our code in ./code. 
+
+Code of the main structure of SMA 
+```
+./code/pythia/models/sma.py
+```
+
+Config Files 
+```
+./code/configs/vqa/textvqa/sma.yml
+```
+
+To setup the environment and train a model, please refer the installation step as [M4C](https://github.com/ronghanghu/mmf/tree/project/m4c_captioner_pre_release/projects/M4C)
 
 ## SBD-Trans OCR
 The imdb files (with SBD-Trans OCR) for TextVQA dataset.
