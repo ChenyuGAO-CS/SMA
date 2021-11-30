@@ -1,0 +1,29 @@
+task_attributes:
+    vqa:
+        datasets:
+        - textvqa
+        dataset_size_proportional_sampling: true
+        dataset_attributes:
+            textvqa:
+                data_root_dir: ../data
+                image_depth_first: false
+                fast_read: false
+                features_max_len: 50 # 100
+                processors:
+                  context_processor:
+                    type: fasttext
+                    params:
+                      max_length: 50
+                      model_file: .vector_cache/wiki.en.bin
+                  ocr_token_processor:
+                    type: simple_word
+                    params: {}
+                  bbox_processor:
+                    type: bbox
+                    params:
+                      max_length: 50
+                return_info: true
+                # Return OCR information
+                use_ocr: true
+                # Return spatial information of OCR tokens if present
+                use_ocr_info: true

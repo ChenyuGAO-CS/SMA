@@ -1,0 +1,152 @@
+includes:
+- common/defaults/configs/tasks/vqa/sma_textvqa.yml
+# Use soft copy
+task_attributes:
+  vqa:
+    dataset_attributes:
+      textvqa:
+        image_features:
+          train:
+          - m4c_stvqa_obj_frcn_features/train,open_images/stvqa_ocr_frcn_features/ST-VQA,open_images/stvqa_trans_feature/ST-VQA
+          val:
+          - m4c_stvqa_obj_frcn_features/train,open_images/stvqa_ocr_frcn_features/ST-VQA,open_images/stvqa_trans_feature/ST-VQA
+          test:
+          - m4c_stvqa_obj_frcn_features/test_task3,open_images/stvqa_ocr_frcn_features/test_task3_imgs,open_images/stvqa_trans_feature/test_task3_imgs
+        imdb_files:
+          train:
+          - imdb/m4c_stvqa/0725_imdb_subtrain.npy
+          val:
+          - imdb/m4c_stvqa/0725_imdb_subval.npy
+          test:
+          - imdb/m4c_stvqa/0725_imdb_test_task3_addObjLabel_Box.npy
+        processors:
+          text_processor:
+            type: bert_tokenizer
+            params:
+              max_length: 20
+              model_data_dir: ../data
+          answer_processor:
+            type: m4c_answer
+            params:
+              vocab_file: m4c_vocabs/stvqa/fixed_answer_vocab_stvqa_5k.txt
+              preprocessor:
+                type: simple_word
+                params: {}
+              context_preprocessor:
+                type: simple_word
+                params: {}
+              max_length: 50
+              max_copy_steps: 12
+              num_answers: 10
+          copy_processor:
+            type: copy
+            params:
+              max_length: 36
+          phoc_processor:
+            type: phoc
+            params:
+              max_length: 50
+model_attributes:
+  lorra: &lorra
+    model_data_dir: ../data
+    metrics:
+    - type: vqa_accuracy
+    losses:
+    - type: m4c_decoding_bce_with_mask_policy_gradient
+    num_context_features: 1
+    context_feature_dim: 300
+    image_feature_dim: 2048
+    context_max_len: 50
+    lr_scale_text_bert: 0.1
+    text_bert_init_from_bert_base: true
+    text_bert:
+      num_hidden_layers: 3
+    classifier:
+      type: linear
+      params:
+        img_hidden_dim: 5000
+        text_hidden_dim: 300
+      ocr_ptr_net:
+        hidden_size: 768
+        query_key_size: 768
+    mmt:
+      hidden_size: 768
+      num_hidden_layers: 4
+    ocr:
+      dropout_prob: 0.1
+    image_feature_embeddings:
+    - modal_combine:
+        type: non_linear_element_multiply
+        params:
+          dropout: 0
+          hidden_dim: 5000
+      normalization: softmax
+      transform:
+        type: linear
+        params:
+          out_dim: 1
+    context_feature_embeddings:
+    - modal_combine:
+        type: non_linear_element_multiply
+        params:
+          dropout: 0
+          hidden_dim: 5000
+      normalization: softmax  # sigmoid
+      transform:
+        type: linear
+        params:
+          out_dim: 1
+    image_feature_encodings:
+    - type: finetune_faster_rcnn_fpn_fc7
+      params:
+        bias_file: detectron/fc6/fc7_b.pkl
+        weights_file: detectron/fc6/fc7_w.pkl
+    context_feature_encodings:
+    - type: default
+      params: {}
+    image_text_modal_combine:
+      type: non_linear_element_multiply
+      params:
+        dropout: 0
+        hidden_dim: 5000
+        # 300 for FastText and 50 for order vectors
+        context_dim: 350
+    text_embeddings:
+    - type: attention
+      params:
+        hidden_dim: 768
+        num_layers: 1
+        conv1_out: 512
+        conv2_out: 2
+        dropout: 0
+        embedding_dim: 768
+        kernel_size: 1
+        padding: 0
+    context_embeddings:
+    - type: identity
+      params:
+        embedding_dim: 350
+optimizer_attributes:
+  params:
+    eps: 1.0e-08
+    lr: 1e-4
+    weight_decay: 0
+  type: Adam
+training_parameters:
+    clip_norm_mode: all
+    clip_gradients: true
+    max_grad_l2_norm: 0.25
+    lr_scheduler: true
+    lr_steps:
+    - 14000
+    - 19000
+    lr_ratio: 0.1
+    use_warmup: true
+    warmup_factor: 0.2
+    warmup_iterations: 2000
+    max_iterations: 28000
+    batch_size: 96
+    num_workers: 7
+    task_size_proportional_sampling: true
+    monitored_metric: vqa_accuracy
+    metric_minimize: false

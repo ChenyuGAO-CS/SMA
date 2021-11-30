@@ -1,0 +1,21 @@
+includes:
+- ../configs/vqa/vqa2/lorra.yml
+task_attributes:
+  vqa:
+    dataset_attributes:
+      vqa2:
+        image_features:
+          train:
+          # - coco/detectron_fix_100/fc6/train_val_2014,coco/resnet152/train_val_2014
+          - open_images/detectron_fix_100/fc6/train,open_images/resnet152/train
+          # - coco/detectron_fix_100/fc6/train_val_2014,coco/resnet152/train_val_2014
+          - open_images/detectron_fix_100/fc6/train,open_images/resnet152/train
+          val:
+          # - coco/detectron_fix_100/fc6/train_val_2014,coco/resnet152/train_val_2014
+          - open_images/detectron_fix_100/fc6/test,open_images/resnet152/test
+        imdb_files:
+          train:
+          - imdb/vqa/imdb_train2014.npy
+          - imdb/vqa/imdb_val2014.npy
+          val:
+          - imdb/vqa/imdb_minival2014.npy
